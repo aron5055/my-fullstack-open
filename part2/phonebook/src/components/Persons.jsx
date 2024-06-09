@@ -1,16 +1,23 @@
-const Record = ({ name, number }) => {
+const Record = ({ id, name, number, handleDelete }) => {
   return (
     <p>
-      {name} {number}
+      {name} {number} &nbsp;
+      <button onClick={() => handleDelete(id, name)}>delete</button>
     </p>
   );
 };
 
-const Persons = ({ persons }) => {
+const Persons = ({ persons, handleDelete }) => {
   return (
     <div>
       {persons.map((person) => (
-        <Record key={person.id} name={person.name} number={person.number} />
+        <Record
+          key={person.id}
+          id={person.id}
+          name={person.name}
+          number={person.number}
+          handleDelete={handleDelete}
+        />
       ))}
     </div>
   );
