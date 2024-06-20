@@ -5,14 +5,11 @@ import SearchBar from "./components/SearchBar";
 import SearchResult from "./components/SearchResult";
 
 function App() {
-  const [countries, setCountries] = useState(null);
-  const [filteredCountries, setFilteredCountries] = useState(null);
+  const [countries, setCountries] = useState([]);
   const [input, setInput] = useState("");
 
   const matchName = (country, name) => {
-    const countryName = country.name;
-    const attrs = ["common", "official"];
-    return attrs.some((attr) => countryName[attr].toLowerCase().includes(name));
+    return country.name.common.toLowerCase().includes(name.toLowerCase());
   };
 
   useEffect(() => {
@@ -20,35 +17,22 @@ function App() {
       .getAll()
       .then((data) => {
         setCountries(data);
-        setFilteredCountries(data);
       })
       .catch((err) => {
         console.log("failed to get all country.");
       });
   }, []);
 
-  useEffect(() => {
-    if (!countries) {
-      return;
-    }
-    const filtered = countries.filter((country) =>
-      matchName(country, input.toLowerCase())
-    );
-    setFilteredCountries(filtered);
-  }, [input]);
-
-  const handleInput = (event) => {
+  const onInput = (event) => {
     setInput(event.target.value);
   };
 
-  const showCountry = (country) => {
-    setFilteredCountries([country]);
-  };
+  const matchedCountry = countries.filter((c) => matchName(c, input));
 
   return (
     <>
-      <SearchBar input={input} handleInput={handleInput} />
-      <SearchResult countries={filteredCountries} handleShow={showCountry} />
+      <SearchBar input={input} onInput={onInput} />
+      <SearchResult countries={matchedCountry} showCountry={setInput} />
     </>
   );
 }

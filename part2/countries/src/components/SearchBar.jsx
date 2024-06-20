@@ -1,8 +1,8 @@
-const SearchBar = ({ input, handleInput }) => {
+const SearchBar = ({ input, onInput }) => {
   return (
     <div>
       find countries &nbsp;
-      <input value={input} onChange={handleInput} />
+      <input value={input} onChange={onInput} />
     </div>
   );
 };

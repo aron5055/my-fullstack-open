@@ -1,7 +1,7 @@
 import CountryInfo from "./CountryInfo";
 import WeatherInfo from "./WeatherInfo";
 
-const SearchResult = ({ countries, handleShow }) => {
+const SearchResult = ({ countries, showCountry }) => {
   if (!countries || countries.length > 10) {
     return <p>Too many matches, specify another filter</p>;
   } else if (countries.length === 1) {
@@ -20,7 +20,7 @@ const SearchResult = ({ countries, handleShow }) => {
           return (
             <p key={country["ccn3"]}>
               {country.name.common}
-              <button onClick={() => handleShow(country)}>show</button>
+              <button onClick={() => showCountry(country)}>show</button>
             </p>
           );
         })}

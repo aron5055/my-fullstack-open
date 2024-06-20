@@ -27,7 +27,7 @@ const Statistics = ({ good, neutral, bad }) => {
 
   const scores =
     good * score["good"] + neutral * score["neutral"] + bad * score["bad"];
-  const positive = (good / total) * 100 + "%";
+  const positive = ((good / total) * 100).toFixed(2) + "%";
   return (
     <table>
       <tbody>
@@ -35,7 +35,7 @@ const Statistics = ({ good, neutral, bad }) => {
         <StatisticLine text="neutral" value={neutral} />
         <StatisticLine text="bad" value={bad} />
         <StatisticLine text="all" value={total} />
-        <StatisticLine text="average" value={scores / total} />
+        <StatisticLine text="average" value={(scores / total).toFixed(2)} />
         <StatisticLine text="positive" value={positive} />
       </tbody>
     </table>
@@ -47,7 +47,7 @@ function App() {
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
 
-  const handleClick = (text) => {
+  const onFeekback = (text) => {
     switch (text) {
       case "good":
         return () => setGood(good + 1);
@@ -61,9 +61,9 @@ function App() {
   return (
     <div>
       <h2>give feedback</h2>
-      <Button onClick={handleClick("good")} text="good" />
-      <Button onClick={handleClick("neutral")} text="neutral" />
-      <Button onClick={handleClick("bad")} text="bad" />
+      <Button onClick={onFeekback("good")} text="good" />
+      <Button onClick={onFeekback("neutral")} text="neutral" />
+      <Button onClick={onFeekback("bad")} text="bad" />
       <h2>statistics</h2>
       <Statistics good={good} neutral={neutral} bad={bad} />
     </div>

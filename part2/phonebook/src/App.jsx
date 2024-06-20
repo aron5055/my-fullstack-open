@@ -7,8 +7,6 @@ import Notification from "./components/Notification";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
-
-  const [filteredPersons, setFilteredPerons] = useState(persons);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [searchName, setSearchName] = useState("");
@@ -18,7 +16,6 @@ const App = () => {
   useEffect(() => {
     personService.getAll().then((persons) => {
       setPersons(persons);
-      setFilteredPerons(persons);
     });
   }, []);
 
@@ -45,10 +42,9 @@ const App = () => {
 
   const updatePersons = (persons) => {
     setPersons(persons);
-    setFilteredPerons(persons);
   };
 
-  const handleNewName = (event) => {
+  const onNewName = (event) => {
     setNewName(event.target.value);
   };
 
@@ -64,52 +60,45 @@ const App = () => {
 
       personService.create(newPerson).then((returnedPerson) => {
         updatePersons(persons.concat(returnedPerson));
-        clearInput();
       });
 
       displayMsg(`Added ${newPerson.name}`);
     } else if (p.number === newNumber) {
       alert(`${newName} is already added to phonebook`);
-      clearInput();
       return;
     } else {
-      personService
-        .update(p.id, { ...p, number: newNumber })
-        .then((returnedPerson) => {
-          updatePersons(
-            persons.map((person) =>
-              person.id !== returnedPerson.id ? person : returnedPerson
-            )
-          );
+      const ok = window.confirm(
+        `${newName} is already added to phonebook, replace the old number with a new one?`
+      );
+      if (ok) {
+        personService
+          .update(p.id, { ...p, number: newNumber })
+          .then((returnedPerson) => {
+            updatePersons(
+              persons.map((person) =>
+                person.id !== returnedPerson.id ? person : returnedPerson
+              )
+            );
 
-          displayMsg(`Changed ${returnedPerson.name}'s number`);
-        })
-        .catch((error) => {
-          displayError(
-            `Information of ${p.name} has already been removed from server`
-          );
-        });
+            displayMsg(`Changed ${returnedPerson.name}'s number`);
+          })
+          .catch((error) => {
+            displayError(
+              `Information of ${p.name} has already been removed from server`
+            );
+          });
+      }
     }
+
+    clearInput();
   };
 
-  const handleNewNumber = (event) => {
+  const onNewNumber = (event) => {
     setNewNumber(event.target.value);
   };
 
-  const handleSearch = (event) => {
-    const searchedText = event.target.value.toLowerCase();
+  const onSearch = (event) => {
     setSearchName(event.target.value);
-
-    if (searchedText.length === 0) {
-      setFilteredPerons(persons);
-      return;
-    }
-
-    const searched = persons.filter((person) => {
-      return person.name.toLowerCase().includes(searchedText);
-    });
-
-    setFilteredPerons(searched);
   };
 
   const handleDelete = (id, name) => {
@@ -124,26 +113,32 @@ const App = () => {
     }
   };
 
+  const personsToShow = searchName
+    ? persons.filter((p) =>
+        p.name.toLowerCase().includes(searchName.toLowerCase())
+      )
+    : persons;
+
   return (
     <div>
       <h2>Phonebook</h2>
       <Notification message={message} error={errorState} />
 
-      <Filter name={searchName} onChange={handleSearch} />
+      <Filter name={searchName} onChange={onSearch} />
 
       <h2>add a new</h2>
 
       <PersonForm
         name={newName}
         number={newNumber}
-        handleName={handleNewName}
-        handleNumber={handleNewNumber}
-        onSubmit={addPerson}
+        handleName={onNewName}
+        handleNumber={onNewNumber}
+        addPerson={addPerson}
       />
 
       <h2>Numbers</h2>
 
-      <Persons persons={filteredPersons} handleDelete={handleDelete} />
+      <Persons persons={personsToShow} handleDelete={handleDelete} />
     </div>
   );
 };
