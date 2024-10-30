@@ -10,12 +10,7 @@ const StatisticLine = ({ text, value }) => (
 );
 
 const Statistics = ({ good, neutral, bad }) => {
-  const score = {
-    good: 1,
-    neutral: 0,
-    bad: -1,
-  };
-  const total = good + neutral + bad;
+  const total = good + bad + neutral;
 
   if (total === 0) {
     return (
@@ -25,9 +20,8 @@ const Statistics = ({ good, neutral, bad }) => {
     );
   }
 
-  const scores =
-    good * score["good"] + neutral * score["neutral"] + bad * score["bad"];
-  const positive = ((good / total) * 100).toFixed(2) + "%";
+  const average = ((good - bad) / total).toFixed(1);
+  const positive = ((good / total) * 100).toFixed(1);
   return (
     <table>
       <tbody>
@@ -35,8 +29,8 @@ const Statistics = ({ good, neutral, bad }) => {
         <StatisticLine text="neutral" value={neutral} />
         <StatisticLine text="bad" value={bad} />
         <StatisticLine text="all" value={total} />
-        <StatisticLine text="average" value={(scores / total).toFixed(2)} />
-        <StatisticLine text="positive" value={positive} />
+        <StatisticLine text="average" value={average} />
+        <StatisticLine text="positive" value={positive + "%"} />
       </tbody>
     </table>
   );
@@ -47,26 +41,15 @@ function App() {
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
 
-  const onFeekback = (text) => {
-    switch (text) {
-      case "good":
-        return () => setGood(good + 1);
-      case "neutral":
-        return () => setNeutral(neutral + 1);
-      case "bad":
-        return () => setBad(bad + 1);
-    }
-  };
-
   return (
-    <div>
+    <>
       <h2>give feedback</h2>
-      <Button onClick={onFeekback("good")} text="good" />
-      <Button onClick={onFeekback("neutral")} text="neutral" />
-      <Button onClick={onFeekback("bad")} text="bad" />
+      <Button onClick={() => setGood(good + 1)} text="good" />
+      <Button onClick={() => setNeutral(neutral + 1)} text="neutral" />
+      <Button onClick={() => setBad(bad + 1)} text="bad" />
       <h2>statistics</h2>
       <Statistics good={good} neutral={neutral} bad={bad} />
-    </div>
+    </>
   );
 }
 
