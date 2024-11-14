@@ -5,8 +5,15 @@ const Person = ({ person, persons, setPersons, setMessage }) => {
     if (confirm(`Delete ${person.name} ?`)) {
       personService
         .deletePerson(person.id)
-        .then((deleted) => {
-          setPersons(persons.filter((p) => p.id !== deleted.id));
+        .then(() => {
+          setPersons(persons.filter((p) => p.id !== person.id));
+          setMessage({
+            content: `Deleted ${person.name}`,
+            error: false,
+          });
+          setTimeout(() => {
+            setMessage(null);
+          }, 5000);
         })
         .catch((error) => {
           setMessage({

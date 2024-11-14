@@ -106,13 +106,13 @@ Thumbs.db
 *.key
 *.pem
 
+.env
 # --------------------------------------------------------
 # BEGIN Explictly Allowed Files (i.e. do NOT ignore these)
 # --------------------------------------------------------
 
 # track these files, if they exist
 !.editorconfig
-!.env.example
 !.git-blame-ignore-revs
 !.gitignore
 !.nvmrc

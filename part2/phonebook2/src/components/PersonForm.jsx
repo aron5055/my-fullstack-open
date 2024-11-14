@@ -15,11 +15,10 @@ const PersonForm = ({ persons, setPersons, setMessage }) => {
 
     const person = persons.filter((person) => person.name === newName);
     if (person.length !== 0) {
-      if (
-        confirm(
-          `${newName} is already added to phonebook, replace the old number with a new one?`
-        )
-      ) {
+      const confirmUpdate = confirm(
+        `${newName} is already added to phonebook, replace the old number with a new one?`
+      );
+      if (confirmUpdate) {
         const p = person[0];
         const newPerson = {
           ...p,
@@ -34,8 +33,8 @@ const PersonForm = ({ persons, setPersons, setMessage }) => {
               )
             )
           );
-        return;
       }
+      return;
     }
 
     const newPerson = {
