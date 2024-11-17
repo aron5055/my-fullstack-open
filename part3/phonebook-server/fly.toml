@@ -1,4 +1,4 @@
-# fly.toml app configuration file generated for phonebook-server-sparkling-sun-1124 on 2024-11-09T14:02:04+08:00
+# fly.toml app configuration file generated for phonebook-server-sparkling-sun-1124 on 2024-11-17T13:11:41+08:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
@@ -9,7 +9,7 @@ primary_region = 'lax'
 [build]
 
 [env]
-  PORT = 3000
+  PORT = '3000'
 
 [http_service]
   internal_port = 3000

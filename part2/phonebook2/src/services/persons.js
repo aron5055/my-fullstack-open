@@ -12,12 +12,7 @@ const getAll = () => {
 };
 
 const create = (newPerson) => {
-  return axios
-    .post(baseUrl, newPerson)
-    .then((response) => response.data)
-    .catch((error) => {
-      console.log(error);
-    });
+  return axios.post(baseUrl, newPerson).then((response) => response.data);
 };
 
 const deletePerson = (id) => {

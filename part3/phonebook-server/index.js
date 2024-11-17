@@ -5,10 +5,11 @@ const morgan = require("morgan");
 const Person = require("./models/phonebook");
 
 const app = express();
+app.use(express.static("dist"));
 app.use(cors());
 app.use(express.json());
 
-morgan.token("body", (request, response) => JSON.stringify(request.body));
+morgan.token("body", (request) => JSON.stringify(request.body));
 app.use(
   morgan(":method :url :status :res[content-length] - :response-time ms :body")
 );
@@ -47,7 +48,7 @@ app.get(idUrl, (request, response, next) => {
 
 app.delete(idUrl, (request, response, next) => {
   Person.findByIdAndDelete(request.params.id)
-    .then((result) => {
+    .then(() => {
       response.status(204).end();
     })
     .catch((error) => next(error));
@@ -56,16 +57,6 @@ app.delete(idUrl, (request, response, next) => {
 app.post(url, (request, response, next) => {
   const body = request.body;
 
-  if (!body.name) {
-    return res.status(400).json({
-      error: "name missing",
-    });
-  }
-  if (!body.number) {
-    return res.status(400).json({
-      error: "number missing",
-    });
-  }
   Person.findOne({ name: body.name })
     .then((existingPerson) => {
       if (existingPerson) {
@@ -109,6 +100,10 @@ const errorHandler = (error, request, response, next) => {
   if (error.name === "CastError") {
     return response.status(404).send({ error: "malformatted id" });
   }
+  if (error.name === "ValidationError") {
+    return response.status(400).json({ error: error.message });
+  }
+
   next(error);
 };
 

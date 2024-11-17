@@ -44,15 +44,26 @@ const PersonForm = ({ persons, setPersons, setMessage }) => {
 
     personService
       .create(newPerson)
-      .then((created) => setPersons([...persons, created]));
+      .then((created) => {
+        setPersons([...persons, created]);
+        setMessage({
+          content: `Added ${newName}`,
+          error: false,
+        });
+        setTimeout(() => {
+          setMessage(null);
+        }, 5000);
+      })
+      .catch((error) => {
+        setMessage({
+          content: error.response.data.error,
+          error: true,
+        });
+        setTimeout(() => {
+          setMessage(null);
+        }, 5000);
+      });
 
-    setMessage({
-      content: `Added ${newName}`,
-      error: false,
-    });
-    setTimeout(() => {
-      setMessage(null);
-    }, 5000);
     setNewName("");
     setNewNumber("");
   };
