@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphY2s4MDgiLCJpZCI6IjY3M2YxODg3MmE4MmFhNjM1Y2M0ZTc2MiIsImlhdCI6MTczMjE4ODM3MH0.UShD1bYkGzg0VS4a0ZUBYEc2X-xRRF2F-cYbNBP2HOs
+
+{
+    "title": "When To Do What You Love",
+    "author": "Paul Graham",
+    "url": "https://paulgraham.com/when.html"
+}
